@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GisFusion - Abonnements Premium à Prix Réduits</title>
+    <meta name="description" content="Accédez à Netflix, Spotify, Amazon Prime et plus encore avec des abonnements partagés légaux à prix réduits.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #e50914, #1DB954);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-menu li {
+            margin: 0 1rem;
+        }
+
+        .nav-menu a {
+            color: #f5f5f5;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background: rgba(229, 9, 20, 0.1);
+            color: #e50914;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #f5f5f5;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: #f5f5f5;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            background: rgba(229, 9, 20, 0.1);
+            color: #e50914;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Page System */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Page */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(229, 9, 20, 0.05) 50%, transparent 100%);
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #e50914, #ff6b35, #1DB954);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e50914, #ff1744);
+            color: white;
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(29, 185, 84, 0.1);
+            color: #1DB954;
+            border: 2px solid #1DB954;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-secondary:hover {
+            background: #1DB954;
+            color: white;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 20px;
+        }
+
+        .service-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border-color: var(--brand-color);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .netflix { --brand-color: #e50914; }
+        .netflix .service-icon { background: linear-gradient(135deg, #e50914, #ff1744); }
+
+        .spotify { --brand-color: #1DB954; }
+        .spotify .service-icon { background: linear-gradient(135deg, #1DB954, #1ed760); }
+
+        .amazon { --brand-color: #00A8E1; }
+        .amazon .service-icon { background: linear-gradient(135deg, #00A8E1, #0096d6); }
+
+        /* Subscriptions Page */
+        .subscriptions-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #e50914, #1DB954);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 12px 25px;
+            background: transparent;
+            border: 2px solid #333;
+            border-radius: 25px;
+            color: #f5f5f5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-tab.active, .filter-tab:hover {
+            border-color: #e50914;
+            background: rgba(229, 9, 20, 0.1);
+            color: #e50914;
+        }
+
+        .subscription-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .subscription-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subscription-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--brand-color);
+        }
+
+        .subscription-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--brand-color);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--brand-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .card-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            background: var(--brand-color);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--brand-color);
+            font-weight: 600;
+        }
+
+        .card-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .card-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-features .check {
+            color: #1DB954;
+            font-weight: bold;
+        }
+
+        /* How it Works Page */
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 2.5rem;
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #e50914, #1DB954);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e50914, #1DB954);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        /* Contact Page */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #e50914, #1DB954);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        /* FAQ Styles */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .faq-item {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(229, 9, 20, 0.1);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 300px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #e50914;
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .services-grid,
+            .subscription-grid,
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .filter-tabs {
+                gap: 0.5rem;
+            }
+
+            .filter-tab {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #333;
+            border-top: 3px solid #e50914;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 2rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">GisFusion</div>
+            <ul class="nav-menu">
+                <li><a href="#" onclick="showPage('home')" class="nav-link active">Accueil</a></li>
+                <li><a href="#" onclick="showPage('subscriptions')" class="nav-link">Abonnements</a></li>
+                <li><a href="#" onclick="showPage('how-it-works')" class="nav-link">Comment ça marche</a></li>
+                <li><a href="#" onclick="showPage('contact')" class="nav-link">Contact</a></li>
+                <li><a href="#" onclick="showPage('faq')" class="nav-link">FAQ</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#" onclick="showPage('home')">Accueil</a>
+            <a href="#" onclick="showPage('subscriptions')">Abonnements</a>
+            <a href="#" onclick="showPage('how-it-works')">Comment ça marche</a>
+            <a href="#" onclick="showPage('contact')">Contact</a>
+            <a href="#" onclick="showPage('faq')">FAQ</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>GisFusion Premium</h1>
+                    <p>Découvrez l'excellence des abonnements partagés. Netflix, Spotify, Amazon Prime et bien plus, à des prix imbattables.</p>
+                    <div class="cta-buttons">
+                        <a href="#" onclick="showPage('subscriptions')" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Découvrir nos offres
+                        </a>
+                        <a href="#" onclick="showPage('how-it-works')" class="btn btn-secondary">
+                            <i class="fas fa-info-circle"></i> Comment ça marche
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="services-grid">
+                <div class="service-card netflix">
+                    <div class="service-icon">
+                        <i class="fab fa-netflix"></i>
+                    </div>
+                    <h3>Netflix Premium</h3>
+                    <p>Accès complet à tout le catalogue Netflix en Ultra HD 4K. Profitez de vos séries et films préférés sans interruption.</p>
+                </div>
+                
+                <div class="service-card spotify">
+                    <div class="service-icon">
+                        <i class="fab fa-spotify"></i>
+                    </div>
+                    <h3>Spotify Premium</h3>
+                    <p>Musique illimitée sans publicité, téléchargement hors ligne et qualité audio supérieure pour une expérience optimale.</p>
+                </div>
+                
+                <div class="service-card amazon">
+                    <div class="service-icon">
+                        <i class="fab fa-amazon"></i>
+                    </div>
+                    <h3>Amazon Prime</h3>
+                    <p>Prime Video, livraisons gratuites, Prime Music et Prime Gaming. Tous les avantages Prime à portée de main.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Subscriptions Page -->
+        <div id="subscriptions" class="page">
+            <div class="subscriptions-container">
+                <div class="page-header">
+                    <h1 class="page-title">Nos Abonnements</h1>
+                    <p>Choisissez l'abonnement qui correspond parfaitement à vos besoins</p>
+                </div>
+
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterSubscriptions('all')">Tous</button>
+                    <button class="filter-tab" onclick="filterSubscriptions('netflix')">Netflix</button>
+                    <button class="filter-tab" onclick="filterSubscriptions('spotify')">Spotify</button>
+                    <button class="filter-tab" onclick="filterSubscriptions('amazon')">Amazon Prime</button>
+                </div>
+
+                <div class="subscription-grid" id="subscription-grid">
+                    <!-- Netflix Cards -->
+                    <div class="subscription-card netflix" data-category="netflix">
+                        <div class="card-badge">Populaire</div>
+                        <div class="card-logo">
+                            <i class="fab fa-netflix"></i>
+                        </div>
+                        <h3 class="card-title">Netflix Essentiel</h3>
+                        <div class="card-price">4,99€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> Qualité HD (720p)</li>
+                            <li><span class="check">✓</span> 1 écran simultané</li>
+                            <li><span class="check">✓</span> Sans publicités</li>
+                            <li><span class="check">✓</span> Mobile uniquement</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Netflix Essentiel')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <div class="subscription-card netflix" data-category="netflix">
+                        <div class="card-logo">
+                            <i class="fab fa-netflix"></i>
+                        </div>
+                        <h3 class="card-title">Netflix Standard</h3>
+                        <div class="card-price">11,59€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> Qualité Full HD (1080p)</li>
+                            <li><span class="check">✓</span> 2 écrans simultanés</li>
+                            <li><span class="check">✓</span> Téléchargement (2 appareils)</li>
+                            <li><span class="check">✓</span> Tous appareils</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Netflix Standard')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <div class="subscription-card netflix" data-category="netflix">
+                        <div class="card-badge">Premium</div>
+                        <div class="card-logo">
+                            <i class="fab fa-netflix"></i>
+                        </div>
+                        <h3 class="card-title">Netflix Premium</h3>
+                        <div class="card-price">15,99€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> Ultra HD / 4K + HDR</li>
+                            <li><span class="check">✓</span> 4 écrans simultanés</li>
+                            <li><span class="check">✓</span> Téléchargement (6 appareils)</li>
+                            <li><span class="check">✓</span> Qualité maximale</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Netflix Premium')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <!-- Spotify Cards -->
+                    <div class="subscription-card spotify" data-category="spotify">
+                        <div class="card-logo">
+                            <i class="fab fa-spotify"></i>
+                        </div>
+                        <h3 class="card-title">Spotify Individuel</h3>
+                        <div class="card-price">10,99€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> Écoute sans pub</li>
+                            <li><span class="check">✓</span> Téléchargement hors ligne</li>
+                            <li><span class="check">✓</span> 1 compte Premium</li>
+                            <li><span class="check">✓</span> Qualité haute définition</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Spotify Individuel')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <div class="subscription-card spotify" data-category="spotify">
+                        <div class="card-logo">
+                            <i class="fab fa-spotify"></i>
+                        </div>
+                        <h3 class="card-title">Spotify Duo</h3>
+                        <div class="card-price">14,99€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> 2 comptes Premium</li>
+                            <li><span class="check">✓</span> Même adresse uniquement</li>
+                            <li><span class="check">✓</span> Mix Duo personnalisés</li>
+                            <li><span class="check">✓</span> Écoute sans pub</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Spotify Duo')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <div class="subscription-card spotify" data-category="spotify">
+                        <div class="card-badge">Famille</div>
+                        <div class="card-logo">
+                            <i class="fab fa-spotify"></i>
+                        </div>
+                        <h3 class="card-title">Spotify Famille</h3>
+                        <div class="card-price">17,99€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> Jusqu'à 6 comptes Premium</li>
+                            <li><span class="check">✓</span> Filtre de contenu enfants</li>
+                            <li><span class="check">✓</span> Mix famille</li>
+                            <li><span class="check">✓</span> Même adresse</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Spotify Famille')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <!-- Amazon Prime Cards -->
+                    <div class="subscription-card amazon" data-category="amazon">
+                        <div class="card-logo">
+                            <i class="fab fa-amazon"></i>
+                        </div>
+                        <h3 class="card-title">Prime Mensuel</h3>
+                        <div class="card-price">6,99€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> Prime Video complet</li>
+                            <li><span class="check">✓</span> Livraison rapide gratuite</li>
+                            <li><span class="check">✓</span> Prime Music (2M titres)</li>
+                            <li><span class="check">✓</span> Prime Gaming</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Prime Mensuel')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <div class="subscription-card amazon" data-category="amazon">
+                        <div class="card-badge">Économie</div>
+                        <div class="card-logo">
+                            <i class="fab fa-amazon"></i>
+                        </div>
+                        <h3 class="card-title">Prime Annuel</h3>
+                        <div class="card-price">69,90€<span style="font-size: 1rem; font-weight: 400;">/an</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> Équivaut à 5,83€/mois</li>
+                            <li><span class="check">✓</span> Tous les avantages Prime</li>
+                            <li><span class="check">✓</span> Prime Video + originals</li>
+                            <li><span class="check">✓</span> Économisez 14€</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Prime Annuel')" class="btn btn-primary">Commander</a>
+                    </div>
+
+                    <div class="subscription-card amazon" data-category="amazon">
+                        <div class="card-badge">Jeunes</div>
+                        <div class="card-logo">
+                            <i class="fab fa-amazon"></i>
+                        </div>
+                        <h3 class="card-title">Prime Jeunes</h3>
+                        <div class="card-price">3,49€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+                        <ul class="card-features">
+                            <li><span class="check">✓</span> -50% sur Prime classique</li>
+                            <li><span class="check">✓</span> Justificatif d'âge requis</li>
+                            <li><span class="check">✓</span> Tous les avantages Prime</li>
+                            <li><span class="check">✓</span> Ou 34,95€/an</li>
+                        </ul>
+                        <a href="#" onclick="orderSubscription('Prime Jeunes')" class="btn btn-primary">Commander</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How it Works Page -->
+        <div id="how-it-works" class="page">
+            <div class="steps-container">
+                <div class="page-header">
+                    <h1 class="page-title">Comment ça marche ?</h1>
+                    <p>Un processus simple et sécurisé en 3 étapes</p>
+                </div>
+
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">
+                            <i class="fas fa-mouse-pointer"></i>
+                        </div>
+                        <h3>Choisissez votre abonnement</h3>
+                        <p>Parcourez notre sélection d'abonnements premium et sélectionnez celui qui correspond parfaitement à vos besoins et votre budget.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Paiement sécurisé</h3>
+                        <p>Effectuez votre paiement en toute sécurité via PayPal, Mobile Money, carte bancaire ou virement. Vos données sont protégées.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Accès immédiat</h3>
+                        <p>Recevez vos identifiants de connexion sous 30 minutes maximum. Profitez immédiatement de votre nouveau service premium !</p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <div style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); padding: 2rem; border-radius: 20px; margin: 2rem 0;">
+                        <h3 style="color: #e50914; margin-bottom: 1rem;">⚡ Service Ultra-Rapide</h3>
+                        <p>Plus de 95% de nos clients reçoivent leurs accès en moins de 15 minutes !</p>
+                    </div>
+                    <a href="#" onclick="showPage('subscriptions')" class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i> Commencer maintenant
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <div class="contact-container">
+                <div class="page-header">
+                    <h1 class="page-title">Contactez-nous</h1>
+                    <p>Notre équipe est disponible 7j/7 pour vous accompagner</p>
+                </div>
+
+                <div class="contact-methods">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h3>WhatsApp</h3>
+                        <p>Support instantané via WhatsApp</p>
+                        <p><strong>+229 XX XX XX XX</strong></p>
+                        <a href="https://wa.me/229XXXXXXXX" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-whatsapp"></i> Contacter
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <h3>Telegram</h3>
+                        <p>Chat sécurisé via Telegram</p>
+                        <p><strong>@GisFusionSupport</strong></p>
+                        <a href="https://t.me/GisFusionSupport" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-telegram"></i> Contacter
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email</h3>
+                        <p>Support par email</p>
+                        <p><strong>support@gisfusion.com</strong></p>
+                        <a href="mailto:support@gisfusion.com" class="btn btn-primary">
+                            <i class="fas fa-envelope"></i> Écrire
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <div style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); padding: 2rem; border-radius: 20px;">
+                        <h3 style="color: #1DB954; margin-bottom: 1rem;">🕒 Horaires de support</h3>
+                        <p><strong>Lundi - Dimanche :</strong> 8h00 - 22h00 (GMT+1)</p>
+                        <p>Réponse moyenne : <strong>moins de 10 minutes</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Page -->
+        <div id="faq" class="page">
+            <div class="faq-container">
+                <div class="page-header">
+                    <h1 class="page-title">Questions Fréquentes</h1>
+                    <p>Trouvez rapidement les réponses à vos questions</p>
+                </div>
+
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Les abonnements partagés sont-ils légaux ?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Oui, absolument ! Le partage d'abonnements familiaux est parfaitement légal selon les conditions d'utilisation des plateformes comme Netflix, Spotify et Amazon Prime. Nous respectons scrupuleusement les règles de chaque service et opérons dans un cadre légal strict.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Combien de temps pour recevoir mes accès ?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>En moyenne, nos clients reçoivent leurs identifiants en 15 à 30 minutes après validation du paiement. Nos équipes traitent les commandes 7j/7 de 8h à 22h. Dans de rares cas, cela peut prendre jusqu'à 2 heures pendant les pics de trafic.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Que se passe-t-il si l'abonnement ne fonctionne plus ?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Nous garantissons un service continu. En cas de problème technique, contactez-nous immédiatement et nous résolvons le souci dans les plus brefs délais. Si nous ne pouvons pas résoudre le problème, nous vous remboursons intégralement ou vous proposons un remplacement.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Puis-je résilier à tout moment ?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Oui, tous nos abonnements sont sans engagement. Vous pouvez arrêter le service à tout moment en nous contactant via WhatsApp, Telegram ou email. Aucune pénalité ni frais de résiliation ne s'appliquent.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Les paiements sont-ils sécurisés ?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Absolument ! Nous utilisons des solutions de paiement cryptées et certifiées (SSL 256 bits). Vos données bancaires ne sont jamais stockées sur nos serveurs et transitent uniquement par des passerelles sécurisées comme PayPal et Stripe.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Puis-je partager mon compte avec d'autres personnes ?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Les comptes que nous fournissons sont déjà optimisés pour le partage selon les conditions du service choisi. Vous ne devez pas partager vos identifiants avec des personnes extérieures à votre foyer pour respecter les conditions d'utilisation des plateformes.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Acceptez-vous les paiements depuis l'Afrique ?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Oui ! Nous acceptons les paiements depuis tous les pays africains via Mobile Money (Orange Money, MTN Money, Moov Money), Western Union, virement bancaire et cartes internationales. Contactez-nous pour connaître les méthodes disponibles dans votre pays.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h4>GisFusion Premium</h4>
+            <p>Votre partenaire de confiance pour des abonnements digitaux à prix réduits</p>
+            
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+            </div>
+            
+            <div style="border-top: 1px solid #333; padding-top: 2rem; margin-top: 2rem; opacity: 0.7;">
+                <p>&copy; 2025 GisFusion Premium. Tous droits réservés.</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                    <a href="#" style="color: #999; text-decoration: none; margin: 0 1rem;">Mentions légales</a>
+                    <a href="#" style="color: #999; text-decoration: none; margin: 0 1rem;">CGV</a>
+                    <a href="#" style="color: #999; text-decoration: none; margin: 0 1rem;">Confidentialité</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global Variables
+        let currentPage = 'home';
+        let mobileMenuOpen = false;
+
+        // Page Navigation System
+        function showPage(pageName) {
+            // Show loading
+            showLoading();
+            
+            setTimeout(() => {
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show target page
+                const targetPage = document.getElementById(pageName);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    currentPage = pageName;
+                }
+                
+                // Update navigation
+                updateNavigation(pageName);
+                
+                // Close mobile menu
+                closeMobileMenu();
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // Hide loading
+                hideLoading();
+            }, 300);
+        }
+
+        // Update Navigation Active State
+        function updateNavigation(activePage) {
+            // Update desktop nav
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            const activeLink = document.querySelector(`[onclick="showPage('${activePage}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.querySelector('.mobile-menu-btn i');
+            
+            mobileMenuOpen = !mobileMenuOpen;
+            
+            if (mobileMenuOpen) {
+                menu.classList.add('active');
+                btn.classList.remove('fa-bars');
+                btn.classList.add('fa-times');
+            } else {
+                menu.classList.remove('active');
+                btn.classList.remove('fa-times');
+                btn.classList.add('fa-bars');
+            }
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.querySelector('.mobile-menu-btn i');
+            
+            menu.classList.remove('active');
+            btn.classList.remove('fa-times');
+            btn.classList.add('fa-bars');
+            mobileMenuOpen = false;
+        }
+
+        // Subscription Filtering
+        function filterSubscriptions(category) {
+            const cards = document.querySelectorAll('.subscription-card');
+            const tabs = document.querySelectorAll('.filter-tab');
+            
+            // Update active tab
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Order Subscription
+        function orderSubscription(subscriptionName) {
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                alert(`Commande pour ${subscriptionName} initiée !\n\nVous allez être redirigé vers notre formulaire de commande sécurisé.\n\nAccès sous 30 minutes maximum !`);
+                
+                // In a real implementation, this would redirect to your order form
+                window.open('https://tally.so/your-form-id', '_blank');
+            }, 1000);
+        }
+
+        // FAQ Toggle
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            const allAnswers = document.querySelectorAll('.faq-answer');
+            const allIcons = document.querySelectorAll('.faq-question i');
+            
+            // Close all other FAQs
+            allAnswers.forEach((item, index) => {
+                if (item !== answer && item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    allIcons[index].style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // Toggle current FAQ
+            answer.classList.toggle('active');
+            
+            if (answer.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Loading Functions
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Navbar Scroll Effect
+        function handleNavbarScroll() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add scroll listener for navbar
+            window.addEventListener('scroll', handleNavbarScroll);
+            
+            // Initialize first page
+            showPage('home');
+            
+            // Add click outside to close mobile menu
+            document.addEventListener('click', function(event) {
+                const navbar = document.querySelector('.navbar');
+                const mobileMenu = document.getElementById('mobile-menu');
+                
+                if (!navbar.contains(event.target) && mobileMenuOpen) {
+                    closeMobileMenu();
+                }
+            });
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && mobileMenuOpen) {
+                    closeMobileMenu();
+                }
+            });
+            
+            // Add smooth scrolling for better UX
+            document.documentElement.style.scrollBehavior = 'smooth';
+            
+            // Performance: Lazy load animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease-out forwards';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe cards for animation
+            setTimeout(() => {
+                document.querySelectorAll('.service-card, .subscription-card, .step-card, .contact-card').forEach(el => {
+                    observer.observe(el);
+                });
+            }, 1000);
+        });
+
+        // Add error handling
+        window.addEventListener('error', function(event) {
+            console.error('Error caught:', event.error);
+            hideLoading();
+        });
+
+        // Add connection status
+        window.addEventListener('online', function() {
+            console.log('Connection restored');
+        });
+
+        window.addEventListener('offline', function() {
+            alert('Connexion perdue. Veuillez vérifier votre connexion internet.');
+        });
+    </script>
+</body>
+</html>
